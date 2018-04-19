@@ -19,7 +19,6 @@ for row in rate_reader:
 
     rate_data.append([currency, exchange_rate_from_usd])
 
-print(rate_data[0])
 
 
 video_data = []
@@ -48,6 +47,17 @@ invalid_writer.writerow(["Invalid ID"])
 
 total_cash = 0
 
+for i in range(len(rate_data)):
+    ex_data = rate_data[i]
+    rate_currency = ex_data[0]
+    rate = ex_data[1]
+
+    if rate_currency == "EUR":
+        EUR_exhange_rate = rate
+
+
+print(EUR_exhange_rate)
+
 # Sort valid and invalid ID's
 for i in range(len(video_data)):
     
@@ -57,7 +67,7 @@ for i in range(len(video_data)):
     vid_likes = row_data[2]
     vid_purchases = row_data[3]
     vid_purchases_USD = row_data[4]
-    vid_purchases_euro = vid_purchases_USD * 0.838539
+    vid_purchases_euro = vid_purchases_USD * EUR_exhange_rate
 
     if len(vid_title) < 30 and vid_likes > 10 and vid_purchases > 200 and vid_purchases_euro < 20:
         total_cash += vid_purchases_USD 
