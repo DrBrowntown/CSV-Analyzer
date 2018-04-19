@@ -8,9 +8,19 @@ video_header = next(video_reader)
 
 rate_path = "C:\\Users\\DrBrowntown\\Vimeo\\exchange_rates.csv"
 rate_file = open(rate_path, newline='')
-rate_reader = csv.reader(video_file)
+rate_reader = csv.reader(rate_file)
 
 rate_header = next(rate_reader)
+
+rate_data = []
+for row in rate_reader:
+    currency = str(row[0])
+    exchange_rate_from_usd = float(row[1])
+
+    rate_data.append([currency, exchange_rate_from_usd])
+
+print(rate_data[0])
+
 
 video_data = []
 for row in video_reader:
