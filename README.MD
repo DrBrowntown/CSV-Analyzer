@@ -4,7 +4,7 @@ This is the Vimeo Backend Exercise. It is a simple tool that sorts through two C
 
 ##Instructions
 
-Place the sort.py file in the folder of your choosing. You will need to edit the file paths located at the top of the sort.py file on lines 7, 9, 11, and 13 in order to run this tool. 
+Place the sort.py file in the folder of your choosing. You will need to edit the file paths located at the top of the sort.py file on lines 6, 8, 10, and 12 in order to run this tool. 
 
 video_path 
     Should be the location of the video csv on your local machine.
@@ -33,7 +33,7 @@ The only thing that was unclear to me was the video price being an "or" question
 I like my solution because it feels very simple and easy to understand.
 
 ###Did you have to make any trade-offs in your design? If so, what?
-The design is pretty straight forward for this project. There is some redundant code that I feel that could be cleaned up and I would like to make an interface for CSV filepaths that wasn't editing the code. 
+The design is pretty straight forward for this project. There is some redundant code that I feel that could be cleaned up and I would like to make an interface for CSV filepaths that wasn't editing global variables in the code. 
 
 ###Is there anything else you want to share about your solution or the problem?
-It's simple, but I think it gives an honest showcase of what I'm capable of. 
+It's simple, but I think it gives an honest showcase of what I'm currently capable of. I'm new to coding, but learning every day. 
