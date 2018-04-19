@@ -1,12 +1,15 @@
 import csv
 
-
 rate_data = []
 video_data = []
 
+video_path = "C:\\Users\\DrBrowntown\\Vimeo\\videos.csv"
+rate_path = "C:\\Users\\DrBrowntown\\Vimeo\\exchange_rates.csv"
+valid_path = "C:\\Users\\DrBrowntown\\Vimeo\\valid.csv"
+invalid_path = "C:\\Users\\DrBrowntown\\Vimeo\\invalid.csv"
 #CSV reader for videos.csv
 def videos_csv_reader():
-    video_path = "C:\\Users\\DrBrowntown\\Vimeo\\videos.csv"
+    
     video_file = open(video_path, newline='')
     video_reader = csv.reader(video_file)
     video_header = next(video_reader)
@@ -22,7 +25,7 @@ def videos_csv_reader():
 
 #CSV reader for exchange_rates.csv
 def exchange_rate_csv_reader():
-    rate_path = "C:\\Users\\DrBrowntown\\Vimeo\\exchange_rates.csv"
+    
     rate_file = open(rate_path, newline='')
     rate_reader = csv.reader(rate_file)
     rate_header = next(rate_reader)
@@ -34,15 +37,13 @@ def exchange_rate_csv_reader():
         rate_data.append([currency, exchange_rate_from_usd])
 
 def sort_valid_and_invalid_videos():
-# Define valid writer
     total_cash = 0
-    valid_path = "C:\\Users\\DrBrowntown\\Vimeo\\valid.csv"
+    # Define valid writer    
     valid_file = open(valid_path, 'w')
     valid_writer = csv.writer(valid_file)
     valid_writer.writerow(["Valid ID"])
 
-    # Define invalid writer
-    invalid_path = "C:\\Users\\DrBrowntown\\Vimeo\\invalid.csv"
+    # Define invalid writer    
     invalid_file = open(invalid_path, 'w')
     invalid_writer = csv.writer(invalid_file)
     invalid_writer.writerow(["Invalid ID"])
@@ -58,7 +59,6 @@ def sort_valid_and_invalid_videos():
         elif rate_currency == "CAD":
             CAD_exchange_rate = rate
    
-
     # Sort valid and invalid ID's
     for i in range(len(video_data)):
         
@@ -70,11 +70,12 @@ def sort_valid_and_invalid_videos():
         vid_purchases_USD = row_data[4]
         vid_purchases_conversion = vid_purchases_USD * CAD_exchange_rate
 
+        #Filtering rules
         if (len(vid_title) < 30 and 
                 vid_likes > 10 and 
                 vid_purchases > 200 and 
                 vid_purchases_conversion < 25):
-        
+
             total_cash += vid_purchases_USD 
             valid_ID = vid_id         
             valid_writer.writerow([valid_ID])      
