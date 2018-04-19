@@ -53,10 +53,12 @@ for i in range(len(rate_data)):
     rate = ex_data[1]
 
     if rate_currency == "EUR":
-        EUR_exhange_rate = rate
+        EUR_exchange_rate = rate
+    elif rate_currency == "CAD":
+        CAD_exchange_rate = rate
 
 
-print(EUR_exhange_rate)
+print(EUR_exchange_rate)
 
 # Sort valid and invalid ID's
 for i in range(len(video_data)):
@@ -67,9 +69,9 @@ for i in range(len(video_data)):
     vid_likes = row_data[2]
     vid_purchases = row_data[3]
     vid_purchases_USD = row_data[4]
-    vid_purchases_euro = vid_purchases_USD * EUR_exhange_rate
+    vid_purchases_conversion = vid_purchases_USD * CAD_exchange_rate
 
-    if len(vid_title) < 30 and vid_likes > 10 and vid_purchases > 200 and vid_purchases_euro < 20:
+    if len(vid_title) < 30 and vid_likes > 10 and vid_purchases > 200 and vid_purchases_conversion < 25:
         total_cash += vid_purchases_USD 
         valid_ID = vid_id   
       
