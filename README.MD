@@ -30,8 +30,10 @@ This should run the tool and output a valid.csv and an invalid.csv based on the 
 The only thing that was unclear to me was the video price being an "or" question. I went with the CAD exchange rate simply because it produced the smaller list. 
 
 ###What makes your solution awesome?
-I like my solution because it feels very simple, understandable, and is under 100 lines. 
+I like my solution because it feels very simple and easy to understand.
+
 ###Did you have to make any trade-offs in your design? If so, what?
 The design is pretty straight forward for this project. There is some redundant code that I feel that could be cleaned up and I would like to make an interface for CSV filepaths that wasn't editing the code. 
+
 ###Is there anything else you want to share about your solution or the problem?
 It's simple, but I think it gives an honest showcase of what I'm capable of. 
