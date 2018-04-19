@@ -14,13 +14,12 @@ valid_path = "C:\\Users\\DrBrowntown\\Vimeo\\valid.csv"
 # Please add invalid.csv filepath
 invalid_path = "C:\\Users\\DrBrowntown\\Vimeo\\invalid.csv"
 
+
 # CSV reader for videos.csv
-
-
 def videos_csv_reader():
     try:
         video_file = open(video_path, newline='')
-        video_reader = csv.reader(video_file, strict = True)
+        video_reader = csv.reader(video_file, strict=True)
         video_header = next(video_reader)
 
         for row in video_reader:
@@ -42,16 +41,15 @@ def videos_csv_reader():
         print(e)
     except ValueError as e:
         print(
-            'Invalid value in videos.csv. Likes, Purchases, and Unit Price must be a float or integer. Error: ' 
-            + str(e))    
+            'Invalid value in videos.csv. Must be float or integer. Error: ' +
+            str(e))
+
 
 # CSV reader for exchange_rates.csv
-
-
 def exchange_rate_csv_reader():
     try:
         rate_file = open(rate_path, newline='')
-        rate_reader = csv.reader(rate_file, strict = True)
+        rate_reader = csv.reader(rate_file, strict=True)
         rate_header = next(rate_reader)
 
         for row in rate_reader:
@@ -60,10 +58,10 @@ def exchange_rate_csv_reader():
 
             rate_data.append([currency, exchange_rate_from_usd])
     except FileNotFoundError as e:
-        print(e)    
+        print(e)
+
+
 # Sorts the video.csv into two csv's of valid and invalid csv's
-
-
 def sort_valid_and_invalid_videos():
 
     total_cash = 0
@@ -116,15 +114,16 @@ def sort_valid_and_invalid_videos():
             invalid_ID = vid_id
             invalid_writer.writerow([invalid_ID])
 
-    # If vid_purchases_conversion is 0, the tool could not access exchange_rate        
+    # If vid_purchases_conversion is 0, the tool could not access exchange_rate
     if (vid_purchases_conversion == 0):
             total_cash = 0
             print('Unable to find currency conversion rate')
+    # If total_cash is 0, no valid videos were found
     if (total_cash <= 0):
-        print("Unable to find any valid videos")
+        print("Unable to find any valid videos with a cash value.")
     else:
         print ("Total US dollar value of valid videos is ${0}"
-       .format(round(total_cash)))
+               .format(round(total_cash)))
 
 videos_csv_reader()
 exchange_rate_csv_reader()
