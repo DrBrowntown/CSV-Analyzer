@@ -4,25 +4,19 @@ This is the Vimeo Backend Exercise. It is a simple tool that sorts through two C
 
 ##Instructions
 
-Place the sort.py file in the folder of your choosing. You will need to edit the file paths located at the top of the sort.py file on lines 6, 8, 10, and 12 in order to run this tool. 
+Place the sort.py file in a folder with the videos.csv and exchange_rates.csv.
 
-video_path 
-    Should be the location of the video csv on your local machine.
+Double click on the file to run.
 
-rate_path
-    Should be the location of the exchange rate csv on your local machine.
-
-valid_path  
-    Should be the location of where you want the valid csv to be saved on your local machine.
-
-invalid_path  
-    Should be the location of where you want the valid csv to be saved on your local machine.
-
-Once you have set your file paths, open terminal and navigate to folder where sort.py is located. 
+Alternatively, open terminal and navigate to folder where sort.py is located. 
 
 Type: python sort.py
 
-This should run the tool and output a valid.csv and an invalid.csv based on the defined parameters. The total value of valid.csv will print into the terminal window. 
+You will be prompted to enter the file path of the folder your files are located in.
+
+This should run the tool and output a valid.csv and an invalid.csv into the folder where the tool is located based on the defined parameters. The total value of valid.csv will print into the terminal window. 
+
+Press enter to close the terminal.
 
 ##Project Questions
 

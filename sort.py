@@ -1,22 +1,12 @@
 import csv
 import errno
+import sys
 import os
 
-
-
-# Please add videos.csv filepath
-video_path = "C:\\Users\\DrBrowntown\\Vimeo\\videos.csv"
-# Please add exchange_rates.csv filepath
-rate_path = "C:\\Users\\DrBrowntown\\Vimeo\\exchange_rates.csv"
-# Please add valid.csv filepath
-valid_path = "C:\\Users\\DrBrowntown\\Vimeo\\valid.csv"
-# Please add invalid.csv filepath
-invalid_path = "C:\\Users\\DrBrowntown\\Vimeo\\invalid.csv"
-
-
 # CSV reader for videos.csv
-def videos_csv_reader(video_list):
+def videos_csv_reader(video_data, local_machine_path):
     try:
+        video_path = os.path.join(local_machine_path, "videos.csv")
         video_file = open(video_path, newline='')
         video_reader = csv.reader(video_file, strict=True)
         video_header = next(video_reader)
@@ -28,7 +18,7 @@ def videos_csv_reader(video_list):
             total_purchases = int(row[3])
             unit_price_in_usd = float(row[4])
 
-            video_list.append([
+            video_data.append([
                 id,
                 title,
                 total_likes,
@@ -36,17 +26,15 @@ def videos_csv_reader(video_list):
                 unit_price_in_usd
                 ])
 
-    except FileNotFoundError as e:
-        print(e)
     except ValueError as e:
         print(
-            'Invalid value in videos.csv. Must be float or integer. Error: ' +
-            str(e))
+            'Invalid value in videos.csv. Must be float or integer. Error:{0} '.format(e))
 
 
 # CSV reader for exchange_rates.csv
-def exchange_rate_csv_reader(rate_list):
-    try:
+def exchange_rate_csv_reader(rate_data, local_machine_path):
+
+        rate_path = os.path.join(local_machine_path, "exchange_rates.csv")        
         rate_file = open(rate_path, newline='')
         rate_reader = csv.reader(rate_file, strict=True)
         rate_header = next(rate_reader)
@@ -55,31 +43,30 @@ def exchange_rate_csv_reader(rate_list):
             currency = str(row[0])
             exchange_rate_from_usd = float(row[1])
 
-            rate_list.append([currency, exchange_rate_from_usd])
-
-    except FileNotFoundError as e:
-        print(e)
+            rate_data.append([currency, exchange_rate_from_usd])
 
 
 # Sorts the video.csv into two csv's of valid and invalid csv's
-def sort_valid_and_invalid_videos(video_list, rate_list):
+def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
 
     total_cash = 0
     CAD_exchange_rate = 0
     vid_purchases_conversion = 0
     # Define valid writer
+    valid_path = os.path.join(local_machine_path, "valid.csv")
     valid_file = open(valid_path, 'w')
     valid_writer = csv.writer(valid_file)
     valid_writer.writerow(["Valid ID"])
 
     # Define invalid writer
+    invalid_path = os.path.join(local_machine_path, "invalid.csv")
     invalid_file = open(invalid_path, 'w')
     invalid_writer = csv.writer(invalid_file)
     invalid_writer.writerow(["Invalid ID"])
 
     # Pull in conversion rates
-    for i in range(len(rate_list)):
-        ex_data = rate_list[i]
+    for i in range(len(rate_data)):
+        ex_data = rate_data[i]
         rate_currency = ex_data[0]
         rate = ex_data[1]
 
@@ -90,9 +77,9 @@ def sort_valid_and_invalid_videos(video_list, rate_list):
             CAD_exchange_rate = rate
 
     # Sort valid and invalid ID's
-    for i in range(len(video_list)):
+    for i in range(len(video_data)):
         # Define the rows to be checked
-        row_data = video_list[i]
+        row_data = video_data[i]
         vid_id = row_data[0]
         vid_title = row_data[1]
         vid_likes = row_data[2]
@@ -125,12 +112,18 @@ def sort_valid_and_invalid_videos(video_list, rate_list):
         print ("Total US dollar value of valid videos is ${0}"
                .format(round(total_cash)))
 
-
+# This bundles the other functions and gives them parameters of the folder file path
 def main():
-    rate_list = rate_data = []
-    video_list = video_data = []
-    videos_csv_reader(video_list)
-    exchange_rate_csv_reader(rate_list)
-    sort_valid_and_invalid_videos(video_list, rate_list)
+    try:
+        local_machine_path = input('Enter the file path of the folder where sort.py and the csv files are located ')
+        rate_data = []
+        video_data = []
+        videos_csv_reader(video_data, local_machine_path)
+        exchange_rate_csv_reader(rate_data, local_machine_path)
+        sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path)
+
+    except FileNotFoundError as e:
+        print(e)
 
 main()
+input("Press enter to exit ")
