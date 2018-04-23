@@ -4,6 +4,7 @@ import sys
 import os
 
 
+###############  BEGIN main() ############### 
 # CSV reader for videos.csv
 def videos_csv_reader(video_data, local_machine_path):
     """Open's videos.csv, reads each line, and
@@ -62,59 +63,33 @@ def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
     """Pulls in appended video_data and rate_data, along with
     the folder path in local_machine_path. Runs
     convert_USD_to_CAD_exchange_rate to pull in defined exchange rate.
-    Defines a valid and invalid csv writer, followed by which rows
-    should be checked. Finally an if statement is used for filtering
-    by the rules defined. The csv writer will then write new rows
-    in the invalid and valid csv's if they pass or fail the
-    filtering rules. Finally, a print statement will display in the
+    Runs valid and invalid csv writer,  Finally, a print statement will display in the
     terminal window the total doller value of the valid videos in
-    videos.csv"""
-    total_cash = 0
+    videos.csv"""  
+    
     CAD_exchange_rate = convert_USD_to_CAD_exchange_rate(rate_data)
-    vid_purchases_conversion = 0
-    
     path_to_valid_writer = valid_csv_writer(local_machine_path)
-    
-    path_to_invalid_writer =  invalid_csv_writer(local_machine_path)    
-
-    # Sort valid and invalid ID's
-    for i in range(len(video_data)):
-        # Define the rows to be checked
-        row_data = video_data[i]
-        vid_id = row_data[0]
-        vid_title = row_data[1]
-        vid_likes = row_data[2]
-        vid_purchases = row_data[3]
-        vid_purchases_USD = row_data[4]
-        vid_purchases_conversion = vid_purchases_USD * CAD_exchange_rate
-
-        # Filtering rules
-        if (len(vid_title) < 30 and
-                vid_likes > 10 and
-                vid_purchases > 200 and
-                vid_purchases_conversion < 25):
-            # Adds each valid video to the cash total and its ID to valid.csv
-            total_cash += vid_purchases_USD
-            valid_ID = vid_id
-            path_to_valid_writer[0].writerow([valid_ID])
-        # Videos taht fail the filtering are placed in invalid.csv
-        else:
-            invalid_ID = vid_id
-            path_to_invalid_writer[0].writerow([invalid_ID])
+    path_to_invalid_writer =  invalid_csv_writer(local_machine_path)
+    row_filter_definitions = define_rows_and_filter_rules(video_data,
+                                                        CAD_exchange_rate,
+                                                        path_to_valid_writer,
+                                                        path_to_invalid_writer)
 
     # If vid_purchases_conversion is 0, the tool could not access exchange_rate
-    if (vid_purchases_conversion == 0):
+    if (row_filter_definitions[0] == 0):
             total_cash = 0
             print('Unable to find currency conversion rate')
     # If total_cash is 0, no valid videos were found
-    if (total_cash <= 0):
+    if (row_filter_definitions[1] <= 0):
         print("Unable to find any valid videos with a cash value.")
     else:
         print ("Total US dollar value of valid videos is ${0}"
-               .format(round(total_cash)))
+               .format(round(row_filter_definitions[1])))
 
     path_to_valid_writer[1].close()
     path_to_invalid_writer[1].close()
+
+############### END main() ############### 
 
 
 # Converts USD to CAD
@@ -137,7 +112,8 @@ def convert_USD_to_CAD_exchange_rate(rate_data):
 
 # Define valid writer
 def valid_csv_writer(local_machine_path):
-
+    """Defines valid csv writer and returns the
+    writer along with the file"""
     valid_path = os.path.join(local_machine_path, "valid.csv")
     valid_file = open(valid_path, 'w')
     valid_writer = csv.writer(valid_file)
@@ -148,7 +124,8 @@ def valid_csv_writer(local_machine_path):
 
 # Define invalid writer
 def invalid_csv_writer(local_machine_path):
-    
+    """Defines invalid csv writer and returns the
+    writer along with the file"""   
     invalid_path = os.path.join(local_machine_path, "invalid.csv")
     invalid_file = open(invalid_path, 'w')
     invalid_writer = csv.writer(invalid_file)
@@ -156,6 +133,41 @@ def invalid_csv_writer(local_machine_path):
 
     return [invalid_writer, invalid_file]
 
+
+def define_rows_and_filter_rules(video_data,
+                                CAD_exchange_rate,
+                                path_to_valid_writer,
+                                path_to_invalid_writer):
+    """For loop defines how row data should be defined and written.
+    An if statement is used for filtering by the rules defined.
+    The csv writer will then write new rows in the invalid
+    and valid csv's if they pass or fail the filtering rules."""
+    vid_purchases_conversion = 0
+    total_cash = 0
+        # Sort valid and invalid ID's
+    for i in range(len(video_data)):
+        # Define the rows to be checked
+        row_data = video_data[i]
+        vid_id = row_data[0]
+        vid_title = row_data[1]
+        vid_likes = row_data[2]
+        vid_purchases = row_data[3]
+        vid_purchases_USD = row_data[4]
+        vid_purchases_conversion = vid_purchases_USD * CAD_exchange_rate
+
+        # Filtering rules
+        if (len(vid_title) < 30 and
+                vid_likes > 10 and
+                vid_purchases > 200 and
+                vid_purchases_conversion < 25):
+            # Adds each valid video to the cash total and its ID to valid.csv
+            total_cash += vid_purchases_USD            
+            path_to_valid_writer[0].writerow([vid_id])
+        # Videos taht fail the filtering are placed in invalid.csv
+        else:            
+            path_to_invalid_writer[0].writerow([vid_id])
+
+    return [vid_purchases_conversion, total_cash]
 
 # Bundles the other functions and gives the folder file path
 def main():
