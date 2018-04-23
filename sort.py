@@ -3,9 +3,11 @@ import errno
 import sys
 import os
 
+
 # CSV reader for videos.csv
 def videos_csv_reader(video_data, local_machine_path):
-"""Open's videos.csv, reads each line, and appends them to the video_data list"""
+    """Open's videos.csv, reads each line, and
+    appends them to the video_data list"""
     try:
         video_path = os.path.join(local_machine_path, "videos.csv")
         video_file = open(video_path)
@@ -32,53 +34,59 @@ def videos_csv_reader(video_data, local_machine_path):
 
     except ValueError as e:
         print(
-            'Invalid value in videos.csv. Must be float or integer. Error:{0} '.format(e))
+            'Invalid value in videos.csv.' +
+            'Must be float or integer. Error:{0} '.format(e))
 
 
 # CSV reader for exchange_rates.csv
 def exchange_rate_csv_reader(rate_data, local_machine_path):
-"""Open's exchange_rates.csv using the folder file path in local_machine_path, 
-reads each line, and appends them to the rate_data list"""
-        rate_path = os.path.join(local_machine_path, "exchange_rates.csv")        
-        rate_file = open(rate_path)
-        rate_reader = csv.reader(rate_file, strict=True)
-        rate_header = next(rate_reader)
+    """Open's exchange_rates.csv using the folder file path in local_machine_path,
+    reads each line, and appends them to the rate_data list"""
+    rate_path = os.path.join(local_machine_path, "exchange_rates.csv")
+    rate_file = open(rate_path)
+    rate_reader = csv.reader(rate_file, strict=True)
+    rate_header = next(rate_reader)
 
-        for row in rate_reader:
-            currency = str(row[0])
-            exchange_rate_from_usd = float(row[1])
+    for row in rate_reader:
+        currency = str(row[0])
+        exchange_rate_from_usd = float(row[1])
 
-            rate_data.append([currency, exchange_rate_from_usd])
+        rate_data.append([currency, exchange_rate_from_usd])
 
-        rate_file.close()
-        return rate_data
+    rate_file.close()
+    return rate_data
 
+
+# Converts USD to CAD
 def convert_USD_to_CAD_exchange_rate(rate_data):
-"""Open's rate_data list, reads each line, searches for CAD(canandian exchange rate), and
-returns that rate in CAD_exchange_rate"""    
+    """Open's rate_data list, reads each line, searches for
+    CAD(canandian exchange rate), and
+    returns that rate in CAD_exchange_rate"""
     CAD_exchange_rate = 0
-     # Pull in conversion rates
+    # Pull in conversion rates
     for i in range(len(rate_data)):
         ex_data = rate_data[i]
         rate_currency = ex_data[0]
         rate = ex_data[1]
-       
+
         if rate_currency == "CAD":
             CAD_exchange_rate = rate
 
-            return CAD_exchange_rate    
+            return CAD_exchange_rate
 
 
 # Sorts the video.csv into two csv's of valid and invalid csv's
 def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
-"""Pulls in appended video_data and rate_data, along with the folder path
-in local_machine_path. Runs conver_USD_to_CAD_exchange_rate to pull in defined
-exchange rate. Defines a valid and invalid csv writer, followed by 
-which rows should be checked. Finally an if statement is used for filtering
-by the rules defined. The csv writer will then write new rows in the invalid
-and valid csv's if they pass or fail the filtering rules. Finally, a print 
-statement will display in the terminal window the total doller value of
-the valid videos in videos.csv"""
+    """Pulls in appended video_data and rate_data, along with
+    the folder path in local_machine_path. Runs
+    convert_USD_to_CAD_exchange_rate to pull in defined exchange rate.
+    Defines a valid and invalid csv writer, followed by which rows
+    should be checked. Finally an if statement is used for filtering
+    by the rules defined. The csv writer will then write new rows
+    in the invalid and valid csv's if they pass or fail the
+    filtering rules. Finally, a print statement will display in the
+    terminal window the total doller value of the valid videos in
+    videos.csv"""
     total_cash = 0
     CAD_exchange_rate = convert_USD_to_CAD_exchange_rate(rate_data)
     vid_purchases_conversion = 0
@@ -133,16 +141,20 @@ the valid videos in videos.csv"""
     valid_file.close()
     invalid_file.close()
 
-# This bundles the other functions and gives them parameters of the folder file path
+
+# Bundles the other functions and gives the folder file path
 def main():
-"""This function will initiate the all others"""
+    """This function will initiate the all others"""
     try:
         local_machine_path = os.getcwd()
         rate_data = []
         video_data = []
         videos_csv_reader(video_data, local_machine_path)
         exchange_rate_csv_reader(rate_data, local_machine_path)
-        sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path)
+        sort_valid_and_invalid_videos(
+            video_data,
+            rate_data,
+            local_machine_path)
 
     except FileNotFoundError as e:
         print(e)
