@@ -12,11 +12,9 @@ Alternatively, open terminal and navigate to folder where sort.py is located.
 
 Type: python sort.py
 
-You will be prompted to enter the file path of the folder your files are located in.
+This should run the tool and output a valid.csv and an invalid.csv into the folder where the tool is located based on the filtering rules. The total value of valid.csv will print into the terminal window. 
 
-This should run the tool and output a valid.csv and an invalid.csv into the folder where the tool is located based on the defined parameters. The total value of valid.csv will print into the terminal window. 
-
-Press enter to close the terminal.
+Press enter to close the program.
 
 ##Project Questions
 
