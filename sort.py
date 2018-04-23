@@ -57,24 +57,6 @@ def exchange_rate_csv_reader(rate_data, local_machine_path):
     return rate_data
 
 
-# Converts USD to CAD
-def convert_USD_to_CAD_exchange_rate(rate_data):
-    """Open's rate_data list, reads each line, searches for
-    CAD(canandian exchange rate), and
-    returns that rate in CAD_exchange_rate"""
-    CAD_exchange_rate = 0
-    # Pull in conversion rates
-    for i in range(len(rate_data)):
-        ex_data = rate_data[i]
-        rate_currency = ex_data[0]
-        rate = ex_data[1]
-
-        if rate_currency == "CAD":
-            CAD_exchange_rate = rate
-
-            return CAD_exchange_rate
-
-
 # Sorts the video.csv into two csv's of valid and invalid csv's
 def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
     """Pulls in appended video_data and rate_data, along with
@@ -90,17 +72,10 @@ def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
     total_cash = 0
     CAD_exchange_rate = convert_USD_to_CAD_exchange_rate(rate_data)
     vid_purchases_conversion = 0
-    # Define valid writer
-    valid_path = os.path.join(local_machine_path, "valid.csv")
-    valid_file = open(valid_path, 'w')
-    valid_writer = csv.writer(valid_file)
-    valid_writer.writerow(["Valid ID"])
-
-    # Define invalid writer
-    invalid_path = os.path.join(local_machine_path, "invalid.csv")
-    invalid_file = open(invalid_path, 'w')
-    invalid_writer = csv.writer(invalid_file)
-    invalid_writer.writerow(["Invalid ID"])
+    
+    path_to_valid_writer = valid_csv_writer(local_machine_path)
+    
+    path_to_invalid_writer =  invalid_csv_writer(local_machine_path)    
 
     # Sort valid and invalid ID's
     for i in range(len(video_data)):
@@ -121,11 +96,11 @@ def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
             # Adds each valid video to the cash total and its ID to valid.csv
             total_cash += vid_purchases_USD
             valid_ID = vid_id
-            valid_writer.writerow([valid_ID])
+            path_to_valid_writer[0].writerow([valid_ID])
         # Videos taht fail the filtering are placed in invalid.csv
         else:
             invalid_ID = vid_id
-            invalid_writer.writerow([invalid_ID])
+            path_to_invalid_writer[0].writerow([invalid_ID])
 
     # If vid_purchases_conversion is 0, the tool could not access exchange_rate
     if (vid_purchases_conversion == 0):
@@ -138,8 +113,48 @@ def sort_valid_and_invalid_videos(video_data, rate_data, local_machine_path):
         print ("Total US dollar value of valid videos is ${0}"
                .format(round(total_cash)))
 
-    valid_file.close()
-    invalid_file.close()
+    path_to_valid_writer[1].close()
+    path_to_invalid_writer[1].close()
+
+
+# Converts USD to CAD
+def convert_USD_to_CAD_exchange_rate(rate_data):
+    """Open's rate_data list, reads each line, searches for
+    CAD(canandian exchange rate), and
+    returns that rate in CAD_exchange_rate"""
+    CAD_exchange_rate = 0
+    # Pull in conversion rates
+    for i in range(len(rate_data)):
+        ex_data = rate_data[i]
+        rate_currency = ex_data[0]
+        rate = ex_data[1]
+
+        if rate_currency == "CAD":
+            CAD_exchange_rate = rate
+
+            return CAD_exchange_rate
+
+
+# Define valid writer
+def valid_csv_writer(local_machine_path):
+
+    valid_path = os.path.join(local_machine_path, "valid.csv")
+    valid_file = open(valid_path, 'w')
+    valid_writer = csv.writer(valid_file)
+    valid_writer.writerow(["Valid ID"])
+
+    return [valid_writer, valid_file]
+
+
+# Define invalid writer
+def invalid_csv_writer(local_machine_path):
+    
+    invalid_path = os.path.join(local_machine_path, "invalid.csv")
+    invalid_file = open(invalid_path, 'w')
+    invalid_writer = csv.writer(invalid_file)
+    invalid_writer.writerow(["Invalid ID"])
+
+    return [invalid_writer, invalid_file]
 
 
 # Bundles the other functions and gives the folder file path
