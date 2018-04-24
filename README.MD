@@ -25,7 +25,7 @@ The only thing that was unclear to me was the video price being an "or" question
 I like my solution because it feels very simple and easy to understand.
 
 ###Did you have to make any trade-offs in your design? If so, what?
-The design is pretty straight forward for this project. There is some redundant code that I feel that could be cleaned up and I would like to make an interface for CSV filepaths that wasn't editing global variables in the code. 
+The design is pretty straight forward for this project. There is some redundant code that I know could be cleaned up. 
 
 ###Is there anything else you want to share about your solution or the problem?
 It's simple, but I think it gives an honest showcase of what I'm currently capable of. I'm new to coding, but learning every day. 
