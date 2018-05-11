@@ -1,6 +1,6 @@
-# Vimeo Backend Exercise
+# CSV Analyzer
 
-This is the Vimeo Backend Exercise. It is a simple tool that sorts through two CSV's that detail data about video's accessible through the Vimeo site. Details include: Video titles, likes, purchases, value of purchases, and currency exchange rates. This tool was built using Python 3.
+This is a simple tool that sorts through two CSV's that detail data about video's accessible through a hypothetical website. Details include: Video titles, likes, purchases, value of purchases, and currency exchange rates. This tool was built using Python 3.
 
 ##Instructions
 
@@ -15,17 +15,3 @@ Type: python sort.py
 This should run the tool and output a valid.csv and an invalid.csv into the folder where the tool is located based on the filtering rules. The total value of valid.csv will print into the terminal window. 
 
 Press enter to close the program.
-
-##Project Questions
-
-###Was the question/problem clear? Did you feel like something was missing or not explained correctly?
-The only thing that was unclear to me was the video price being an "or" question. I went with the CAD exchange rate simply because it produced the smaller list. 
-
-###What makes your solution awesome?
-I like my solution because it feels very simple and easy to understand.
-
-###Did you have to make any trade-offs in your design? If so, what?
-The design is pretty straight forward for this project. There is some redundant code that I know could be cleaned up. 
-
-###Is there anything else you want to share about your solution or the problem?
-It's simple, but I think it gives an honest showcase of what I'm currently capable of. I'm new to coding, but learning every day. 
